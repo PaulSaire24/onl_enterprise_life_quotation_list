@@ -17,7 +17,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 
 	@Override
-	public List<ListQuotationDTO> listQuotationByClient() {
+	public List<ListQuotationDTO> executeListQuotationByClient() {
 		boolean flaRimac = Boolean.parseBoolean(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION));
 		LOGGER.info("flag rimac list quotation {}",flaRimac);
 		if (flaRimac){

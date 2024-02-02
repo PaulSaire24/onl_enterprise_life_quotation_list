@@ -58,7 +58,7 @@ public class RBVDR406Test {
 	@Test
 	public void executeTest(){
 		when(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION)).thenReturn("true");
-		List<ListQuotationDTO> listQuotation = rbvdR406.listQuotationByClient();
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
 		Assert.assertEquals(0, context.getAdviceList().size());
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(1,listQuotation.size());
@@ -67,7 +67,7 @@ public class RBVDR406Test {
 	@Test
 	public void executeTestNUll(){
 		when(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION)).thenReturn("false");
-		List<ListQuotationDTO> listQuotation = rbvdR406.listQuotationByClient();
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
 		Assert.assertEquals(0, context.getAdviceList().size());
 		Assert.assertNull(listQuotation);
 		Assert.assertEquals(null,listQuotation);

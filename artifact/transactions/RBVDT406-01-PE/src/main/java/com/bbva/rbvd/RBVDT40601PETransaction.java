@@ -19,7 +19,7 @@ public class RBVDT40601PETransaction extends AbstractRBVDT40601PETransaction {
 
 		RBVDR406 rbvdR406 = this.getServiceLibrary(RBVDR406.class);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.listQuotationByClient();
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
 
 		if (!CollectionUtils.isEmpty(listQuotation) && !this.getAdviceList().isEmpty()){
 			this.setData(listQuotation);
