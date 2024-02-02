@@ -7,7 +7,7 @@
 		<artifactId>DTOS-onl_enterprise_life_quotation_list</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.bbva.rbvd.dto.enterpriseinsurance</groupId>
+	<groupId>com.bbva.rbvd.dto.insuranceenterprise</groupId>
 	<artifactId>RBVDC406</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
@@ -15,7 +15,7 @@
 	<properties>
 		<osgi.version.manifest>0.0</osgi.version.manifest>
 			<sonar.coverage.exclusions>
-				/src/main/java/com/bbva/rbvd/dto/enterpriseinsurance/**/**.java
+				/src/main/java/com/bbva/rbvd/dto/insuranceenterprise/**/**.java
 			</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
