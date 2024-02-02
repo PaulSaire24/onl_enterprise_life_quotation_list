@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transaction xmlns="http://www.w3schools.com" transactionName="RBVDT406" application="RBVD" version="01" country="PE" language="ES">
+	<paramsIn/>
+	<paramsOut>
+		<list order="1" name="data" mandatory="1">
+			<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO" artifactId="RBVDC406">
+				<parameter order="1" name="id" mandatory="1" type="String" size="12"/>
+				<parameter order="2" name="quotationDate" mandatory="0" type="Timestamp" size="0"/>
+				<dto order="3" name="employees" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.EmployeesDTO" artifactId="RBVDC406">
+					<parameter order="1" name="areMajorityAge" mandatory="1" type="Boolean" size="0"/>
+					<parameter order="2" name="employeesNumber" mandatory="1" type="Double" size="5"/>
+					<dto order="3" name="monthlyPayrollAmount" mandatory="1" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.AmountDTO" artifactId="RBVDC406">
+						<parameter order="1" name="amount" mandatory="1" type="Double" size="6"/>
+						<parameter order="2" name="currency" mandatory="1" type="String" size="10"/>
+					</dto>
+				</dto>
+				<dto order="4" name="product" mandatory="1" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.ProductDTO" artifactId="RBVDC406">
+					<parameter order="1" name="id" mandatory="1" type="String" size="10"/>
+					<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+					<list order="3" name="plans" mandatory="1">
+						<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.PlanDTO" artifactId="RBVDC406">
+							<parameter order="1" name="id" mandatory="1" type="String" size="10"/>
+							<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+							<parameter order="3" name="isSelected" mandatory="0" type="Boolean" size="0"/>
+							<parameter order="4" name="isRecommended" mandatory="0" type="Boolean" size="0"/>
+							<dto order="5" name="totalInstallment" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.AmountDTO" artifactId="RBVDC406">
+								<parameter order="1" name="amount" mandatory="1" type="Double" size="10"/>
+								<parameter order="2" name="currency" mandatory="1" type="String" size="12"/>
+							</dto>
+							<list order="6" name="installmentPlans" mandatory="0">
+								<dto order="1" name="Type" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.InstallmentPlansDTO" artifactId="RBVDC406">
+									<parameter order="1" name="paymentsTotalNumber" mandatory="0" type="Double" size="12"/>
+									<dto order="2" name="paymentAmount" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.AmountDTO" artifactId="RBVDC406">
+										<parameter order="1" name="amount" mandatory="1" type="Double" size="12"/>
+										<parameter order="2" name="currency" mandatory="1" type="String" size="10"/>
+									</dto>
+								</dto>
+							</list>
+							<dto order="7" name="period" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO" artifactId="RBVDC406">
+								<parameter order="1" name="id" mandatory="1" type="String" size="12"/>
+								<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+							</dto>
+						</dto>
+					</list>
+				</dto>
+				<dto order="5" name="validityPeriod" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.ValidityPeriodDTO" artifactId="RBVDC406">
+					<parameter order="1" name="startDate" mandatory="1" type="Date (YYYY-MM-DD)" size="0"/>
+					<parameter order="2" name="endDate" mandatory="1" type="Date (YYYY-MM-DD)" size="0"/>
+				</dto>
+				<dto order="6" name="status" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO" artifactId="RBVDC406">
+					<parameter order="1" name="id" mandatory="1" type="String" size="12"/>
+					<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+				</dto>
+				<parameter order="7" name="quotationReference" mandatory="0" type="String" size="15"/>
+			</dto>
+		</list>
+	</paramsOut>
+	<description>trx for list quotation by client</description>
+</transaction>
