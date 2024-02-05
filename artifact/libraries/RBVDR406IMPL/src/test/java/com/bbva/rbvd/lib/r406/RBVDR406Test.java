@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.bbva.rbvd.lib.r406.util.Constants;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -69,8 +70,8 @@ public class RBVDR406Test {
 		when(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION)).thenReturn("false");
 		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
 		Assert.assertEquals(0, context.getAdviceList().size());
-		Assert.assertNull(listQuotation);
-		Assert.assertEquals(null,listQuotation);
+		Assert.assertEquals(Collections.emptyList(),listQuotation);
+		Assert.assertEquals(0,listQuotation.size());
 	}
 	
 }

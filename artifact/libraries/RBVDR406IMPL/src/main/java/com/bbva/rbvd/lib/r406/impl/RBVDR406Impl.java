@@ -21,7 +21,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 		boolean flaRimac = Boolean.parseBoolean(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION));
 		LOGGER.info("flag rimac list quotation {}",flaRimac);
 		if (flaRimac){
-			LOGGER.info("mock service rimac {}");
+			LOGGER.info("mock service rimac");
 			List<ListQuotationDTO> listQuotation = new ArrayList<>();
 			ListQuotationDTO quotationDTO =  new ListQuotationDTO();
 			quotationDTO.setId("12457690");
@@ -36,8 +36,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			return listQuotation;
 
 		}else{
-			LOGGER.info("flaf false----> {}");
-			return null;
+			LOGGER.info("flaf false---->");
+			return Collections.emptyList();
 		}
 
 	}
