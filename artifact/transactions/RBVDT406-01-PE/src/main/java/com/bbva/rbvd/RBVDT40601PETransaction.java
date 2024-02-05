@@ -22,6 +22,7 @@ public class RBVDT40601PETransaction extends AbstractRBVDT40601PETransaction {
 		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
 
 		if (!CollectionUtils.isEmpty(listQuotation) && !this.getAdviceList().isEmpty()){
+			LOGGER.info("response data {}",listQuotation);
 			this.setData(listQuotation);
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		}else{
