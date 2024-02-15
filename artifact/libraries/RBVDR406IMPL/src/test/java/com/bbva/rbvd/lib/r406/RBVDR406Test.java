@@ -5,22 +5,22 @@ import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
 import javax.annotation.Resource;
 
+import com.bbva.pisd.lib.r402.PISDR402;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
+import com.bbva.rbvd.lib.r406.impl.RBVDR406Impl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.aop.framework.Advised;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.bbva.rbvd.lib.r406.util.Constants;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -33,11 +33,12 @@ public class RBVDR406Test {
 	@Spy
 	private Context context;
 
-	@Resource(name = "rbvdR406")
-	private RBVDR406 rbvdR406;
+	private RBVDR406Impl rbvdR406 = new RBVDR406Impl();
 
 	@Resource(name = "applicationConfigurationService")
 	private ApplicationConfigurationService applicationConfigurationService;
+
+	private PISDR402 pisdr402;
 
 	@Before
 	public void setUp() throws Exception {
@@ -45,6 +46,14 @@ public class RBVDR406Test {
 		context = new Context();
 		ThreadContext.set(context);
 		getObjectIntrospection();
+
+		pisdr402 = Mockito.mock(PISDR402.class);
+
+		rbvdR406.setPisdR402(pisdr402);
+		rbvdR406.setApplicationConfigurationService(applicationConfigurationService);
+
+		Mockito.when(pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(Collections.emptyList());
+		Mockito.when(this.applicationConfigurationService.getProperty(applicationConfigurationService.getProperty("Mensual"))).thenReturn("MONTHLY");
 	}
 	
 	private Object getObjectIntrospection() throws Exception{
@@ -55,23 +64,151 @@ public class RBVDR406Test {
 		}
 		return result;
 	}
+
+	private List<Map<String,Object>> getListQuotationsMap(){
+		List<Map<String,Object>> mapList = new ArrayList<>();
+
+		Map<String,Object> map1 = new HashMap<>();
+		map1.put("POLICY_QUOTA_INTERNAL_ID","0814000038346");
+		map1.put("QUOTE_DATE","2024-01-26 09:01:50");
+		map1.put("QUOTE_STATUS","COT");
+		map1.put("FINANCING_START_DATE","2024-01-26");
+		map1.put("FINANCING_END_DATE","2025-01-26");
+		map1.put("TOTAL_AMOUNT",null);
+		map1.put("CURRENCY_ID",null);
+		map1.put("NUMBER_PAYMENTS",null);
+		map1.put("PREMIUM_AMOUNT",null);
+		map1.put("CO_STATUS",null);
+		map1.put("INSURANCE_PRODUCT_TYPE","842");
+		map1.put("INSURANCE_PRODUCT_DESC","SEGURO VIDA LEY");
+		map1.put("INSURANCE_MODALITY_TYPE","01");
+		map1.put("INSURANCE_MODALITY_NAME","PLAN PLATA");
+		map1.put("PAYMENT_FREQUENCY_NAME",null);
+		map1.put("PAYMENT_FREQUENCY_ID",null);
+
+		mapList.add(map1);
+
+		Map<String,Object> map2 = new HashMap<>();
+		map2.put("POLICY_QUOTA_INTERNAL_ID","0814000038434");
+		map2.put("QUOTE_DATE","2024-01-26 05:01:15");
+		map2.put("QUOTE_STATUS","COT");
+		map2.put("FINANCING_START_DATE","2024-01-26");
+		map2.put("FINANCING_END_DATE","2025-01-26");
+		map2.put("TOTAL_AMOUNT",570.31);
+		map2.put("CURRENCY_ID","PEN");
+		map2.put("NUMBER_PAYMENTS",12);
+		map2.put("PREMIUM_AMOUNT",51.85);
+		map2.put("CO_STATUS","PEN");
+		map2.put("INSURANCE_PRODUCT_TYPE","842");
+		map2.put("INSURANCE_PRODUCT_DESC","SEGURO VIDA LEY");
+		map2.put("INSURANCE_MODALITY_TYPE","02");
+		map2.put("INSURANCE_MODALITY_NAME","PLAN ORO");
+		map2.put("PAYMENT_FREQUENCY_NAME","MENSUAL");
+		map2.put("PAYMENT_FREQUENCY_ID",1);
+
+		mapList.add(map2);
+
+		return mapList;
+	}
 	
 	@Test
-	public void executeTest(){
-		when(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION)).thenReturn("true");
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
-		Assert.assertEquals(0, context.getAdviceList().size());
+	public void executeTestWithListQuotationNotEmpty(){
+		List<Map<String,Object>> listQuotationsMap = getListQuotationsMap();
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
 		Assert.assertNotNull(listQuotation);
-		Assert.assertEquals(1,listQuotation.size());
+		Assert.assertEquals(2,listQuotation.size());
+		Assert.assertEquals(listQuotationsMap.get(0).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(0).getId());
+		Assert.assertEquals(listQuotationsMap.get(1).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(1).getId());
+		Assert.assertEquals("QUOTED",listQuotation.get(0).getStatus().getId());
+		Assert.assertEquals("CONTRACTED",listQuotation.get(1).getStatus().getId());
+		Assert.assertEquals(1,listQuotation.get(0).getProduct().getPlans().size());
+		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
+
 	}
 
 	@Test
-	public void executeTestNUll(){
-		when(this.applicationConfigurationService.getProperty(Constants.FLAG_RIMAC_LIST_QUOTATION)).thenReturn("false");
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
+	public void executeTestWithListQuotationEmpty(){
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
 		Assert.assertEquals(0, context.getAdviceList().size());
 		Assert.assertEquals(Collections.emptyList(),listQuotation);
 		Assert.assertEquals(0,listQuotation.size());
 	}
+
+	@Test
+	public void executeListQuotationWithStatusNull(){
+		List<Map<String,Object>> listQuotationsMap = getListQuotationsMap();
+		listQuotationsMap.get(1).put("QUOTE_STATUS",null);
+		listQuotationsMap.get(0).put("QUOTE_STATUS",null);
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
+		Assert.assertNotNull(listQuotation);
+		Assert.assertEquals(2,listQuotation.size());
+		Assert.assertNull(listQuotation.get(0).getStatus());
+		Assert.assertNull(listQuotation.get(1).getStatus());
+		Assert.assertNotNull(listQuotation.get(0).getProduct());
+	}
+
+	@Test
+	public void executeListQuotationWithFinancingDateIsNull(){
+		List<Map<String,Object>> listQuotationsMap = getListQuotationsMap();
+		listQuotationsMap.get(1).put("FINANCING_START_DATE",null);
+		listQuotationsMap.get(0).put("FINANCING_END_DATE",null);
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
+		Assert.assertNotNull(listQuotation);
+		Assert.assertEquals(2,listQuotation.size());
+		Assert.assertNull(listQuotation.get(0).getValidityPeriod());
+		Assert.assertNull(listQuotation.get(1).getValidityPeriod());
+	}
+
+	@Test
+	public void executeListQuotationWithModalityNull() {
+		List<Map<String, Object>> listQuotationsMap = getListQuotationsMap();
+		listQuotationsMap.get(0).put("INSURANCE_MODALITY_TYPE", null);
+		listQuotationsMap.get(0).put("INSURANCE_MODALITY_NAME", null);
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
+		Assert.assertNotNull(listQuotation);
+		Assert.assertEquals(2,listQuotation.size());
+		Assert.assertNotNull(listQuotation.get(0).getProduct());
+		Assert.assertNotNull(listQuotation.get(1).getProduct());
+		Assert.assertEquals(0,listQuotation.get(0).getProduct().getPlans().size());
+		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
+	}
+
+	@Test
+	public void executeListQuotationWithPeriodNull() {
+		List<Map<String, Object>> listQuotationsMap = getListQuotationsMap();
+		listQuotationsMap.get(1).put("PAYMENT_FREQUENCY_NAME", null);
+		listQuotationsMap.get(1).put("PAYMENT_FREQUENCY_ID", null);
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+
+		Assert.assertNotNull(listQuotation);
+		Assert.assertEquals(2,listQuotation.size());
+		Assert.assertNotNull(listQuotation.get(1).getId());
+		Assert.assertNotNull(listQuotation.get(1).getProduct());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getId());
+		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
+		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().size());
+		Assert.assertNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod());
+	}
+
 	
 }

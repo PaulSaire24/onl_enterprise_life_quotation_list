@@ -19,10 +19,11 @@ public class RBVDT40601PETransaction extends AbstractRBVDT40601PETransaction {
 
 		RBVDR406 rbvdR406 = this.getServiceLibrary(RBVDR406.class);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient();
+		String customerId =  this.getCustomerid();
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient(customerId);
 
-		if (!CollectionUtils.isEmpty(listQuotation) && !this.getAdviceList().isEmpty()){
-			LOGGER.info("response data {}",listQuotation);
+		if (!CollectionUtils.isEmpty(listQuotation) && this.getAdviceList().isEmpty()){
+			LOGGER.info("RBVDT40601PETransaction - listQuotation {}",listQuotation);
 			this.setData(listQuotation);
 			this.setHttpResponseCode(HttpResponseCode.HTTP_CODE_200, Severity.OK);
 		}else{

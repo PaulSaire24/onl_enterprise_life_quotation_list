@@ -14,6 +14,13 @@ public abstract class AbstractRBVDT40601PETransaction extends AbstractTransactio
 
 
 	/**
+	 * Return value for input parameter customerId
+	 */
+	protected String getCustomerid(){
+		return (String)this.getParameter("customerId");
+	}
+
+	/**
 	 * Set value for List<ListQuotationDTO> output parameter data
 	 */
 	protected void setData(final List<ListQuotationDTO> field){
