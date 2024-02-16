@@ -134,7 +134,7 @@ public class RBVDR406Test {
 	public void executeTestWithListQuotationEmpty(){
 		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
 
-		Assert.assertEquals(0, context.getAdviceList().size());
+		Assert.assertEquals(1, context.getAdviceList().size());
 		Assert.assertEquals(Collections.emptyList(),listQuotation);
 		Assert.assertEquals(0,listQuotation.size());
 	}

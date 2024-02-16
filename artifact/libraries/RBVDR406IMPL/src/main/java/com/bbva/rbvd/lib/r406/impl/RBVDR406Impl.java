@@ -40,8 +40,6 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 		LOGGER.info("RBVDR406Impl - executeListQuotationByClient() - START");
 
-		List<ListQuotationDTO> quotations = new ArrayList<>();
-
 		Map<String,Object> arguments = new HashMap<>();
 		arguments.put(ConstantsUtil.InsuranceQuotation.FIELD_CUSTOMER_ID,customerId);
 		arguments.put(ConstantsUtil.InsuranceProduct.FIELD_PRODUCT_SHORT_DESC,PRODUCT_NAME);
@@ -50,7 +48,12 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 				"PISD.GET_LIST_QUOTATIONS_BY_CUSTOMERID",arguments);
 
 		if(!CollectionUtils.isEmpty(lisQuotationsMap)){
+			List<ListQuotationDTO> quotations;
+
 			List<QuotationsDAO> quotationsDAOList = lisQuotationsMap.stream().map(map -> {
+				map.forEach((key,value) -> LOGGER.info("RBVDR406Impl - executeListQuotationByClient() - " +
+						"lisQuotationsMap - key {} -> value {}",key,value));
+
 				QuotationsDAO quotationsDAO = new QuotationsDAO();
 				quotationsDAO.setPolicyQuotaInternalId((String) map.get(
 						ConstantsUtil.InsuranceQuotation.FIELD_POLICY_QUOTA_INTERNAL_ID));
@@ -88,6 +91,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			}).collect(Collectors.toList());
 
 			quotations = quotationsDAOList.stream().map(quotationsDAO -> {
+				LOGGER.info("RBVDR406Impl - executeListQuotationByClient() - quotationsDAO {}",quotationsDAO.toString());
 				ListQuotationDTO quotationDTO = new ListQuotationDTO();
 
 				quotationDTO.setId(quotationsDAO.getPolicyQuotaInternalId());
@@ -99,9 +103,14 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 				return quotationDTO;
 			}).collect(Collectors.toList());
+
+			return quotations;
+
+		}else{
+			this.addAdvice("RBVD01020091","No se encontró ninguna cotización del cliente para el producto Vida Ley");
+			return Collections.emptyList();
 		}
 
-		return quotations;
 	}
 
 	private ProductDTO createProduct(QuotationsDAO quotationsDAO){
