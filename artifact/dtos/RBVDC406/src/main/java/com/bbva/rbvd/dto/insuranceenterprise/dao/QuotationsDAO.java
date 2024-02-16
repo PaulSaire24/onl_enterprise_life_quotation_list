@@ -1,13 +1,10 @@
 package com.bbva.rbvd.dto.insuranceenterprise.dao;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class QuotationsDAO {
 
     private String policyQuotaInternalId;
-    private LocalDateTime quoteDate;
+    private String quoteDate;
     private String quoteStatus;
     private String financingStartDate;
     private String financingEndDate;
@@ -32,11 +29,11 @@ public class QuotationsDAO {
         this.policyQuotaInternalId = policyQuotaInternalId;
     }
 
-    public LocalDateTime getQuoteDate() {
+    public String getQuoteDate() {
         return quoteDate;
     }
 
-    public void setQuoteDate(LocalDateTime quoteDate) {
+    public void setQuoteDate(String quoteDate) {
         this.quoteDate = quoteDate;
     }
 

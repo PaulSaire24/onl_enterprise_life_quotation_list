@@ -83,19 +83,19 @@ public class CommonFieldsDTO implements Serializable {
         this.period = period;
     }
 
-    public Boolean getSelected() {
+    public Boolean getIsSelected() {
         return isSelected;
     }
 
-    public void setSelected(Boolean selected) {
+    public void setIsSelected(Boolean selected) {
         isSelected = selected;
     }
 
-    public Boolean getRecommended() {
+    public Boolean getIsRecommended() {
         return isRecommended;
     }
 
-    public void setRecommended(Boolean recommended) {
+    public void setIsRecommended(Boolean recommended) {
         isRecommended = recommended;
     }
 

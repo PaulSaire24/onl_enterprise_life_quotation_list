@@ -9,23 +9,19 @@ import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.InstallmentPlansDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.dao.QuotationsDAO;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringToUpperAndLowerCase;
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.stringIsNullOrEmpty;
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateToLocalDate;
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateToLocalDateTime;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.*;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertLocalDateToDate;
 
 
 public class RBVDR406Impl extends RBVDR406Abstract {
@@ -57,8 +53,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 				QuotationsDAO quotationsDAO = new QuotationsDAO();
 				quotationsDAO.setPolicyQuotaInternalId((String) map.get(
 						ConstantsUtil.InsuranceQuotation.FIELD_POLICY_QUOTA_INTERNAL_ID));
-				quotationsDAO.setQuoteDate(convertStringDateToLocalDateTime((String) map.get(
-						ConstantsUtil.InsuranceQuotation.FIELD_QUOTE_DATE)));
+				quotationsDAO.setQuoteDate((String) map.get(
+						ConstantsUtil.InsuranceQuotation.FIELD_QUOTE_DATE));
 				quotationsDAO.setQuoteStatus((String) map.get(
 						ConstantsUtil.InsuranceQuotation.FIELD_POLICY_QUOTA_STATUS_TYPE));
 				quotationsDAO.setFinancingStartDate((String) map.get(
@@ -95,7 +91,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 				ListQuotationDTO quotationDTO = new ListQuotationDTO();
 
 				quotationDTO.setId(quotationsDAO.getPolicyQuotaInternalId());
-				quotationDTO.setQuotationDate(quotationsDAO.getQuoteDate());
+				quotationDTO.setQuotationDate(convertLocalDateToDate(
+						convertStringDateToLocalDate(quotationsDAO.getQuoteDate())));
 				quotationDTO.setProduct(createProduct(quotationsDAO));
 				quotationDTO.setValidityPeriod(createValidityPeriod(
 						quotationsDAO.getFinancingStartDate(),quotationsDAO.getFinancingEndDate()));
@@ -152,8 +149,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 		if(!stringIsNullOrEmpty(startDate) && !stringIsNullOrEmpty(endDate)){
 			ValidityPeriodDTO validityPeriod = new ValidityPeriodDTO();
-			validityPeriod.setStartDate(convertStringDateToLocalDate(startDate));
-			validityPeriod.setEndDate(convertStringDateToLocalDate(endDate));
+			validityPeriod.setStartDate(convertLocalDateToDate(convertStringDateToLocalDate(startDate)));
+			validityPeriod.setEndDate(convertLocalDateToDate(convertStringDateToLocalDate(endDate)));
 
 			return validityPeriod;
 		}
@@ -171,7 +168,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 			planDTO.setId(quotationsDAO.getModalityType());
 			planDTO.setName(quotationsDAO.getModalityName());
-			planDTO.setSelected(Boolean.TRUE);
+			planDTO.setIsSelected(Boolean.TRUE);
 			planDTO.setTotalInstallment(createAmountDTO(quotationsDAO.getTotalAmount(),
 					quotationsDAO.getCurrencyId()));
 			planDTO.setInstallmentPlans(createInstallmentPlans(quotationsDAO));

@@ -56,8 +56,8 @@ public class PlanDTO extends  CommonFieldsDTO{
         return "PlanDTO{" +
                 "id='" + this.getId()+ + '\''+
                 ", name='" + this.getName()+ '\''+
-                ", isSelected=" + getSelected() +
-                ", isRecommended=" + getRecommended() +
+                ", isSelected=" + getIsSelected() +
+                ", isRecommended=" + getIsRecommended() +
                 ", totalInstallment=" + totalInstallment +
                 ", installmentPlans=" + installmentPlans +
                 ", coverages=" + coverages +

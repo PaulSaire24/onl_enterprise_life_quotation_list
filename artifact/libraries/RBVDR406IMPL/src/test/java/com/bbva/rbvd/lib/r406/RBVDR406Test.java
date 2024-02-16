@@ -70,7 +70,7 @@ public class RBVDR406Test {
 
 		Map<String,Object> map1 = new HashMap<>();
 		map1.put("POLICY_QUOTA_INTERNAL_ID","0814000038346");
-		map1.put("QUOTE_DATE","2024-01-26 09:01:50");
+		map1.put("QUOTE_DATE","2024-01-26");
 		map1.put("QUOTE_STATUS","COT");
 		map1.put("FINANCING_START_DATE","2024-01-26");
 		map1.put("FINANCING_END_DATE","2025-01-26");
@@ -90,7 +90,7 @@ public class RBVDR406Test {
 
 		Map<String,Object> map2 = new HashMap<>();
 		map2.put("POLICY_QUOTA_INTERNAL_ID","0814000038434");
-		map2.put("QUOTE_DATE","2024-01-26 05:01:15");
+		map2.put("QUOTE_DATE","2024-01-26");
 		map2.put("QUOTE_STATUS","COT");
 		map2.put("FINANCING_START_DATE","2024-01-26");
 		map2.put("FINANCING_END_DATE","2025-01-26");
@@ -127,6 +127,8 @@ public class RBVDR406Test {
 		Assert.assertEquals("CONTRACTED",listQuotation.get(1).getStatus().getId());
 		Assert.assertEquals(1,listQuotation.get(0).getProduct().getPlans().size());
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
+		Assert.assertNotNull(listQuotation.get(0).getQuotationDate());
+		Assert.assertNotNull(listQuotation.get(1).getQuotationDate());
 
 	}
 

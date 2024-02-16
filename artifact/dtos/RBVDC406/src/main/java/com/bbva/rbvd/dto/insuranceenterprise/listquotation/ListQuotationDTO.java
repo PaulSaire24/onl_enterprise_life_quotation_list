@@ -1,7 +1,7 @@
 package com.bbva.rbvd.dto.insuranceenterprise.listquotation;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.EmployeesDTO;
@@ -11,7 +11,7 @@ import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.ValidityPeriodDTO;
 public class ListQuotationDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private LocalDateTime quotationDate;
+	private Date quotationDate;
 	private EmployeesDTO employees;
 	private ProductDTO product;
 	private ValidityPeriodDTO validityPeriod;
@@ -26,11 +26,11 @@ public class ListQuotationDTO implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getQuotationDate() {
+	public Date getQuotationDate() {
 		return quotationDate;
 	}
 
-	public void setQuotationDate(LocalDateTime quotationDate) {
+	public void setQuotationDate(Date quotationDate) {
 		this.quotationDate = quotationDate;
 	}
 
