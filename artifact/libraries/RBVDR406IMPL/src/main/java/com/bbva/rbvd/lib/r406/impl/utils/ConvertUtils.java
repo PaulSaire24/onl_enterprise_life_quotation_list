@@ -1,8 +1,9 @@
 package com.bbva.rbvd.lib.r406.impl.utils;
 
 
-import org.joda.time.LocalDate;
-
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class ConvertUtils {
@@ -19,11 +20,11 @@ public class ConvertUtils {
     }
 
     public static LocalDate convertStringDateToLocalDate(String date){
-        return LocalDate.parse(date);
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public static Date convertLocalDateToDate(LocalDate date){
-        return date.toDateTimeAtStartOfDay().toDate();
+        return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }
