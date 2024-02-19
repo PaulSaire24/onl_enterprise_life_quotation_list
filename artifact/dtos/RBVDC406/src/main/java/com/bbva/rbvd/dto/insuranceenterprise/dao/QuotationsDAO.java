@@ -1,6 +1,8 @@
 package com.bbva.rbvd.dto.insuranceenterprise.dao;
 
 
+import java.math.BigDecimal;
+
 public class QuotationsDAO {
 
     private String policyQuotaInternalId;
@@ -8,10 +10,10 @@ public class QuotationsDAO {
     private String quoteStatus;
     private String financingStartDate;
     private String financingEndDate;
-    private Double totalAmount;
+    private BigDecimal totalAmount;
     private String currencyId;
     private Integer numberPayments;
-    private Double premiumAmount;
+    private BigDecimal premiumAmount;
     private String coStatus;
     private String productType;
     private String productDesc;
@@ -46,12 +48,20 @@ public class QuotationsDAO {
     }
 
 
-    public Double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(BigDecimal premiumAmount) {
+        this.premiumAmount = premiumAmount;
     }
 
     public String getCurrencyId() {
@@ -70,13 +80,7 @@ public class QuotationsDAO {
         this.numberPayments = numberPayments;
     }
 
-    public Double getPremiumAmount() {
-        return premiumAmount;
-    }
 
-    public void setPremiumAmount(Double premiumAmount) {
-        this.premiumAmount = premiumAmount;
-    }
 
     public String getCoStatus() {
         return coStatus;

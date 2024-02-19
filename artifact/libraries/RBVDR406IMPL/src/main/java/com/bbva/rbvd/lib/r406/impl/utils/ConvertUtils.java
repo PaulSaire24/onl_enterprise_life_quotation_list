@@ -1,6 +1,7 @@
 package com.bbva.rbvd.lib.r406.impl.utils;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,21 @@ public class ConvertUtils {
 
     public static LocalDate convertStringDateToLocalDate(String date){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static BigDecimal getBigDecimalValue(Object value){
+        BigDecimal ret = null;
+        if(value != null){
+            if(value instanceof BigDecimal){
+                ret = (BigDecimal) value;
+            }else if(value instanceof String){
+                ret = new BigDecimal((String) value);
+            }else if(value instanceof Double){
+                ret = BigDecimal.valueOf(((Double) value).doubleValue());
+            }
+        }
+
+        return ret;
     }
 
     public static Date convertLocalDateToDate(LocalDate date){

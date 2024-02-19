@@ -27,6 +27,7 @@ import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateTo
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.stringIsNullOrEmpty;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringToUpperAndLowerCase;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertLocalDateToDate;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.getBigDecimalValue;
 
 
 public class RBVDR406Impl extends RBVDR406Abstract {
@@ -66,13 +67,11 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 						ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_START_DATE));
 				quotationsDAO.setFinancingEndDate((String) map.get(
 						ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_END_DATE));
-				quotationsDAO.setTotalAmount((Double) map.get(
-						ConstantsUtil.InsuranceContract.FIELD_SETTLEMENT_FIX_PREMIUM_AMOUNT));
+				quotationsDAO.setTotalAmount(getBigDecimalValue(map.get(ConstantsUtil.InsuranceContract.FIELD_SETTLEMENT_FIX_PREMIUM_AMOUNT)));
 				quotationsDAO.setCurrencyId((String) map.get(ConstantsUtil.InsuranceContract.FIELD_CURRENCY_ID));
 				quotationsDAO.setNumberPayments((Integer) map.get(
 						ConstantsUtil.InsuranceContract.FIELD_ISSUED_RECEIPT_NUMBER));
-				quotationsDAO.setPremiumAmount((Double) map.get(
-						ConstantsUtil.InsuranceContract.FIELD_PREMIUM_AMOUNT));
+				quotationsDAO.setPremiumAmount(getBigDecimalValue(map.get(ConstantsUtil.InsuranceContract.FIELD_PREMIUM_AMOUNT)));
 				quotationsDAO.setCoStatus((String) map.get(
 						ConstantsUtil.InsuranceContract.FIELD_INSRNC_CO_CONTRACT_STATUS_TYPE));
 				quotationsDAO.setProductType((String) map.get(
@@ -217,10 +216,10 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 		}
 	}
 
-	private AmountDTO createAmountDTO(Double amount,String currency){
+	private AmountDTO createAmountDTO(BigDecimal amount,String currency){
 		if(amount != null && !stringIsNullOrEmpty(currency)){
 			AmountDTO amountDTO = new AmountDTO();
-			amountDTO.setAmount(BigDecimal.valueOf(amount));
+			amountDTO.setAmount(amount.doubleValue());
 			amountDTO.setCurrency(currency);
 
 			return amountDTO;
