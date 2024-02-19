@@ -33,6 +33,8 @@ public class ConvertUtils {
                 ret = new BigDecimal((String) value);
             }else if(value instanceof Double){
                 ret = BigDecimal.valueOf(((Double) value).doubleValue());
+            }else if(value instanceof Integer){
+                ret = BigDecimal.valueOf((Integer) value);
             }
         }
 

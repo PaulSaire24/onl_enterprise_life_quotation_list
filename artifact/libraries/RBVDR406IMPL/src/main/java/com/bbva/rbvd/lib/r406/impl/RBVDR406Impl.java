@@ -69,8 +69,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 						ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_END_DATE));
 				quotationsDAO.setTotalAmount(getBigDecimalValue(map.get(ConstantsUtil.InsuranceContract.FIELD_SETTLEMENT_FIX_PREMIUM_AMOUNT)));
 				quotationsDAO.setCurrencyId((String) map.get(ConstantsUtil.InsuranceContract.FIELD_CURRENCY_ID));
-				quotationsDAO.setNumberPayments((Integer) map.get(
-						ConstantsUtil.InsuranceContract.FIELD_ISSUED_RECEIPT_NUMBER));
+				quotationsDAO.setNumberPayments(getBigDecimalValue(map.get(
+						ConstantsUtil.InsuranceContract.FIELD_ISSUED_RECEIPT_NUMBER)));
 				quotationsDAO.setPremiumAmount(getBigDecimalValue(map.get(ConstantsUtil.InsuranceContract.FIELD_PREMIUM_AMOUNT)));
 				quotationsDAO.setCoStatus((String) map.get(
 						ConstantsUtil.InsuranceContract.FIELD_INSRNC_CO_CONTRACT_STATUS_TYPE));
@@ -84,8 +84,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 						ConstantsUtil.InsurancePrdModality.FIELD_INSURANCE_MODALITY_NAME));
 				quotationsDAO.setPaymentFrequencyName((String) map.get(
 						ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_NAME));
-				quotationsDAO.setPaymentFrequencyId((Integer) map.get(
-						ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_ID));
+				quotationsDAO.setPaymentFrequencyId(getBigDecimalValue(map.get(
+						ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_ID)));
 
 				return quotationsDAO;
 			}).collect(Collectors.toList());
@@ -190,7 +190,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			List<InstallmentPlansDTO> installmentPlans = new ArrayList<>();
 			InstallmentPlansDTO installmentPlansDTO = new InstallmentPlansDTO();
 
-			installmentPlansDTO.setPaymentsTotalNumber(Long.valueOf(quotationsDAO.getNumberPayments()));
+			installmentPlansDTO.setPaymentsTotalNumber(quotationsDAO.getNumberPayments().longValue());
 			installmentPlansDTO.setPaymentAmount(createAmountDTO(quotationsDAO.getPremiumAmount(),
 					quotationsDAO.getCurrencyId()));
 			installmentPlansDTO.setPeriod(createPeriod(quotationsDAO.getPaymentFrequencyName()));

@@ -12,7 +12,7 @@ public class QuotationsDAO {
     private String financingEndDate;
     private BigDecimal totalAmount;
     private String currencyId;
-    private Integer numberPayments;
+    private BigDecimal numberPayments;
     private BigDecimal premiumAmount;
     private String coStatus;
     private String productType;
@@ -20,7 +20,7 @@ public class QuotationsDAO {
     private String modalityType;
     private String modalityName;
     private String paymentFrequencyName;
-    private Integer paymentFrequencyId;
+    private BigDecimal paymentFrequencyId;
 
 
     public String getPolicyQuotaInternalId() {
@@ -70,14 +70,6 @@ public class QuotationsDAO {
 
     public void setCurrencyId(String currencyId) {
         this.currencyId = currencyId;
-    }
-
-    public Integer getNumberPayments() {
-        return numberPayments;
-    }
-
-    public void setNumberPayments(Integer numberPayments) {
-        this.numberPayments = numberPayments;
     }
 
 
@@ -130,11 +122,19 @@ public class QuotationsDAO {
         this.paymentFrequencyName = paymentFrequencyName;
     }
 
-    public Integer getPaymentFrequencyId() {
+    public BigDecimal getNumberPayments() {
+        return numberPayments;
+    }
+
+    public void setNumberPayments(BigDecimal numberPayments) {
+        this.numberPayments = numberPayments;
+    }
+
+    public BigDecimal getPaymentFrequencyId() {
         return paymentFrequencyId;
     }
 
-    public void setPaymentFrequencyId(Integer paymentFrequencyId) {
+    public void setPaymentFrequencyId(BigDecimal paymentFrequencyId) {
         this.paymentFrequencyId = paymentFrequencyId;
     }
 
