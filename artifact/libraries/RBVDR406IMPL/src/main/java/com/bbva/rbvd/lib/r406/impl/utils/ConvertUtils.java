@@ -2,11 +2,12 @@ package com.bbva.rbvd.lib.r406.impl.utils;
 
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import java.util.Date;
 
 public class ConvertUtils {
+
+    private ConvertUtils(){}
 
 
     public static String convertStringToUpperAndLowerCase(String value){

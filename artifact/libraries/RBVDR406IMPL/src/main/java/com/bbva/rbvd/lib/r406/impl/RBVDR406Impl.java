@@ -9,7 +9,6 @@ import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.InstallmentPlansDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.dao.QuotationsDAO;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -17,10 +16,16 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.*;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateToLocalDate;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.stringIsNullOrEmpty;
+import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringToUpperAndLowerCase;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertLocalDateToDate;
 
 
