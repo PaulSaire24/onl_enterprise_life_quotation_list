@@ -35,7 +35,6 @@ public class RBVDR406Test {
 
 	private RBVDR406Impl rbvdR406 = new RBVDR406Impl();
 
-	@Resource(name = "applicationConfigurationService")
 	private ApplicationConfigurationService applicationConfigurationService;
 
 	private PISDR402 pisdr402;
@@ -48,14 +47,15 @@ public class RBVDR406Test {
 		getObjectIntrospection();
 
 		pisdr402 = Mockito.mock(PISDR402.class);
+		applicationConfigurationService = Mockito.mock(ApplicationConfigurationService.class);
 
 		rbvdR406.setPisdR402(pisdr402);
 		rbvdR406.setApplicationConfigurationService(applicationConfigurationService);
 
 		Mockito.when(pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(Collections.emptyList());
-		Mockito.when(this.applicationConfigurationService.getProperty(applicationConfigurationService.getProperty("Mensual"))).thenReturn("MONTHLY");
+		Mockito.when(applicationConfigurationService.getProperty("Mensual")).thenReturn("MONTHLY");
 	}
-	
+
 	private Object getObjectIntrospection() throws Exception{
 		Object result = this.rbvdR406;
 		if(this.rbvdR406 instanceof Advised){
@@ -110,7 +110,7 @@ public class RBVDR406Test {
 
 		return mapList;
 	}
-	
+
 	@Test
 	public void executeTestWithListQuotationNotEmpty(){
 		List<Map<String,Object>> listQuotationsMap = getListQuotationsMap();
@@ -129,6 +129,13 @@ public class RBVDR406Test {
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
 		Assert.assertNotNull(listQuotation.get(0).getQuotationDate());
 		Assert.assertNotNull(listQuotation.get(1).getQuotationDate());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPaymentsTotalNumber());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPaymentAmount());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPaymentAmount().getAmount());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPaymentAmount().getCurrency());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
+		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getName());
 
 	}
 
@@ -212,5 +219,4 @@ public class RBVDR406Test {
 		Assert.assertNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod());
 	}
 
-	
 }

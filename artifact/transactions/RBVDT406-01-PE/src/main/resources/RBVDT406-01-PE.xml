@@ -34,12 +34,12 @@
 										<parameter order="1" name="amount" mandatory="1" type="Double" size="12"/>
 										<parameter order="2" name="currency" mandatory="1" type="String" size="10"/>
 									</dto>
+									<dto order="3" name="period" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO" artifactId="RBVDC406">
+										<parameter order="1" name="id" mandatory="1" type="String" size="20"/>
+										<parameter order="2" name="name" mandatory="0" type="String" size="20"/>
+									</dto>
 								</dto>
 							</list>
-							<dto order="7" name="period" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO" artifactId="RBVDC406">
-								<parameter order="1" name="id" mandatory="1" type="String" size="12"/>
-								<parameter order="2" name="name" mandatory="0" type="String" size="20"/>
-							</dto>
 						</dto>
 					</list>
 				</dto>

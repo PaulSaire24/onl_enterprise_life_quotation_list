@@ -208,8 +208,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 		}else{
 			DescriptionDTO periodDTO = new DescriptionDTO();
 
-			periodDTO.setId(this.applicationConfigurationService.getProperty(
-					convertStringToUpperAndLowerCase(frequencyName)));
+			String frequencyId = convertStringToUpperAndLowerCase(frequencyName);
+			periodDTO.setId(this.applicationConfigurationService.getProperty(frequencyId));
 			periodDTO.setName(frequencyName);
 
 			return periodDTO;

@@ -13,11 +13,15 @@ public class ConvertUtils {
 
 
     public static String convertStringToUpperAndLowerCase(String value){
-        return value.toUpperCase().charAt(0) + value.substring(1).toUpperCase();
+        StringBuilder str = new StringBuilder();
+        str.append(value.toUpperCase().charAt(0));
+        str.append(value.toLowerCase().substring(1));
+
+        return str.toString();
     }
 
     public static boolean stringIsNullOrEmpty(String value){
-        return value == null || value.isEmpty() || " ".equals(value);
+        return value == null || value.isEmpty();
     }
 
     public static LocalDate convertStringDateToLocalDate(String date){
