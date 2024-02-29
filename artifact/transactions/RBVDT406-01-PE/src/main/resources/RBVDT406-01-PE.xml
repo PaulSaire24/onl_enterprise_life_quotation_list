@@ -48,8 +48,8 @@
 					<parameter order="2" name="endDate" mandatory="1" type="Date (YYYY-MM-DD)" size="0"/>
 				</dto>
 				<dto order="4" name="status" mandatory="0" package="com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO" artifactId="RBVDC406">
-					<parameter order="1" name="id" mandatory="1" type="String" size="12"/>
-					<parameter order="2" name="name" mandatory="0" type="String" size="15"/>
+					<parameter order="1" name="id" mandatory="1" type="String" size="100"/>
+					<parameter order="2" name="name" mandatory="0" type="String" size="100"/>
 				</dto>
 				<parameter order="5" name="id" mandatory="1" type="String" size="20"/>
 				<parameter order="6" name="quotationReference" mandatory="0" type="String" size="40"/>

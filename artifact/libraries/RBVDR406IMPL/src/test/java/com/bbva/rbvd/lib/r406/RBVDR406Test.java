@@ -3,10 +3,10 @@ package com.bbva.rbvd.lib.r406;
 import com.bbva.elara.configuration.manager.application.ApplicationConfigurationService;
 import com.bbva.elara.domain.transaction.Context;
 import com.bbva.elara.domain.transaction.ThreadContext;
-import javax.annotation.Resource;
 
 import com.bbva.pisd.lib.r402.PISDR402;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
+import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
 import com.bbva.rbvd.lib.r406.impl.RBVDR406Impl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,9 +33,7 @@ public class RBVDR406Test {
 	@Spy
 	private Context context;
 
-	private RBVDR406Impl rbvdR406 = new RBVDR406Impl();
-
-	private ApplicationConfigurationService applicationConfigurationService;
+	private final RBVDR406Impl rbvdR406 = new RBVDR406Impl();
 
 	private PISDR402 pisdr402;
 
@@ -47,7 +45,7 @@ public class RBVDR406Test {
 		getObjectIntrospection();
 
 		pisdr402 = Mockito.mock(PISDR402.class);
-		applicationConfigurationService = Mockito.mock(ApplicationConfigurationService.class);
+		ApplicationConfigurationService applicationConfigurationService = Mockito.mock(ApplicationConfigurationService.class);
 
 		rbvdR406.setPisdR402(pisdr402);
 		rbvdR406.setApplicationConfigurationService(applicationConfigurationService);
@@ -85,6 +83,7 @@ public class RBVDR406Test {
 		map1.put("INSURANCE_MODALITY_NAME","PLAN PLATA");
 		map1.put("PAYMENT_FREQUENCY_NAME",null);
 		map1.put("PAYMENT_FREQUENCY_ID",null);
+		map1.put("RFQ_INTERNAL_ID","0814000038434");
 
 		mapList.add(map1);
 
@@ -105,6 +104,7 @@ public class RBVDR406Test {
 		map2.put("INSURANCE_MODALITY_NAME","PLAN ORO");
 		map2.put("PAYMENT_FREQUENCY_NAME","MENSUAL");
 		map2.put("PAYMENT_FREQUENCY_ID",1);
+		map2.put("RFQ_INTERNAL_ID",null);
 
 		mapList.add(map2);
 
@@ -123,8 +123,10 @@ public class RBVDR406Test {
 		Assert.assertEquals(2,listQuotation.size());
 		Assert.assertEquals(listQuotationsMap.get(0).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(0).getId());
 		Assert.assertEquals(listQuotationsMap.get(1).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(1).getId());
-		Assert.assertEquals("QUOTED",listQuotation.get(0).getStatus().getId());
-		Assert.assertEquals("CONTRACTED",listQuotation.get(1).getStatus().getId());
+		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusId(),listQuotation.get(0).getStatus().getId());
+		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusId(),listQuotation.get(1).getStatus().getId());
+		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusName(),listQuotation.get(0).getStatus().getName());
+		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusName(),listQuotation.get(1).getStatus().getName());
 		Assert.assertEquals(1,listQuotation.get(0).getProduct().getPlans().size());
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
 		Assert.assertNotNull(listQuotation.get(0).getQuotationDate());
@@ -136,6 +138,8 @@ public class RBVDR406Test {
 		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod());
 		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getId());
 		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getName());
+		Assert.assertNotNull(listQuotation.get(0).getQuotationReference());
+		Assert.assertNull(listQuotation.get(1).getQuotationReference());
 
 	}
 

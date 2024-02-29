@@ -11,6 +11,7 @@ public class ConstantsUtil {
         public static final String FIELD_QUOTE_DATE = "QUOTE_DATE";
         public static final String FIELD_POLICY_QUOTA_STATUS_TYPE = "QUOTE_STATUS";
         public static final String FIELD_CUSTOMER_ID = "CUSTOMER_ID";
+        public static final String FIELD_RFQ_INTERNAL_ID = "RFQ_INTERNAL_ID";
 
         public static final String QUOTE_STATUS_COT = "COT";
 
@@ -60,8 +61,8 @@ public class ConstantsUtil {
 
     public enum StatusEnum{
 
-        STATUS_CONTRACTED("CONTRACTED","CONTRATADA"),
-        STATUS_QUOTED("QUOTED","COTIZADA");
+        STATUS_CONTRACTED("En Formalizacion||Pendiente de carga","En Formalizacion||Pendiente de carga"),
+        STATUS_QUOTED("En Gestion||Cotizada","En Gestion||Cotizada");
 
 
         private final String statusId;

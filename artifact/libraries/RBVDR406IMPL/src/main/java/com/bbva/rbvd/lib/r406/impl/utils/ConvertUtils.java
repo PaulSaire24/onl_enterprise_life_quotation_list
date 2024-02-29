@@ -49,4 +49,8 @@ public class ConvertUtils {
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
+    public static String convertObjectToString(Object obj){
+        return JsonUtils.getInstance().serialization(obj);
+    }
+
 }

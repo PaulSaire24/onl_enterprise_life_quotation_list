@@ -21,6 +21,7 @@ public class QuotationsDAO {
     private String modalityName;
     private String paymentFrequencyName;
     private BigDecimal paymentFrequencyId;
+    private String rfqInternalId;
 
 
     public String getPolicyQuotaInternalId() {
@@ -154,14 +155,22 @@ public class QuotationsDAO {
         this.financingEndDate = financingEndDate;
     }
 
+    public String getRfqInternalId() {
+        return rfqInternalId;
+    }
+
+    public void setRfqInternalId(String rfqInternalId) {
+        this.rfqInternalId = rfqInternalId;
+    }
+
     @Override
     public String toString() {
         return "QuotationsDAO{" +
                 "policyQuotaInternalId='" + policyQuotaInternalId + '\'' +
-                ", quoteDate=" + quoteDate +
+                ", quoteDate='" + quoteDate + '\'' +
                 ", quoteStatus='" + quoteStatus + '\'' +
-                ", financingStartDate=" + financingStartDate +
-                ", financingEndDate=" + financingEndDate +
+                ", financingStartDate='" + financingStartDate + '\'' +
+                ", financingEndDate='" + financingEndDate + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", currencyId='" + currencyId + '\'' +
                 ", numberPayments=" + numberPayments +
@@ -173,6 +182,7 @@ public class QuotationsDAO {
                 ", modalityName='" + modalityName + '\'' +
                 ", paymentFrequencyName='" + paymentFrequencyName + '\'' +
                 ", paymentFrequencyId=" + paymentFrequencyId +
+                ", rfqInternalId='" + rfqInternalId + '\'' +
                 '}';
     }
 }
