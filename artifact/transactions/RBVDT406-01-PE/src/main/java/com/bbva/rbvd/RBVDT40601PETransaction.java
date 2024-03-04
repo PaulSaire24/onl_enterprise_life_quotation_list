@@ -1,5 +1,6 @@
 package com.bbva.rbvd;
 
+import com.bbva.elara.domain.transaction.RequestHeaderParamsName;
 import com.bbva.elara.domain.transaction.Severity;
 import com.bbva.elara.domain.transaction.response.HttpResponseCode;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
@@ -20,7 +21,9 @@ public class RBVDT40601PETransaction extends AbstractRBVDT40601PETransaction {
 		RBVDR406 rbvdR406 = this.getServiceLibrary(RBVDR406.class);
 
 		String customerId =  this.getCustomerid();
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient(customerId);
+		String channelCode = (String) this.getRequestHeader().getHeaderParameter(RequestHeaderParamsName.CHANNELCODE);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient(customerId,channelCode);
 
 		if (!CollectionUtils.isEmpty(listQuotation) && this.getAdviceList().isEmpty()){
 			LOGGER.info("RBVDT40601PETransaction - listQuotation {}",listQuotation);

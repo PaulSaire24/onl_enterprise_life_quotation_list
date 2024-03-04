@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface RBVDR406 {
 
-	List<ListQuotationDTO> executeListQuotationByClient(String customerId);
+	List<ListQuotationDTO> executeListQuotationByClient(String customerId,String channelCode);
 
 }

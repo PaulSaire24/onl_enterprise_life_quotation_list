@@ -9,6 +9,8 @@ import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.InstallmentPlansDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.dao.QuotationsDAO;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
+import com.bbva.rbvd.dto.insuranceenterprise.utils.ErrorsUtil;
+import com.bbva.rbvd.lib.r406.impl.transform.bean.InsuranceQuotationBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +29,6 @@ import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateTo
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.stringIsNullOrEmpty;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringToUpperAndLowerCase;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertLocalDateToDate;
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.getBigDecimalValue;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertObjectToString;
 
 
@@ -36,14 +37,17 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR406Impl.class);
 
 	private static final String PRODUCT_NAME = "VIDALEY";
+	private static final String PRE_STATUS = "STATUS_";
+	private static final String PRE_SUBSTATUS = "SUBSTATUS_";
+	private static final String POST_ID = "_ID";
 
 
 	@Override
-	public List<ListQuotationDTO> executeListQuotationByClient(String customerId) {
+	public List<ListQuotationDTO> executeListQuotationByClient(String customerId,String channelCode) {
 
 		LOGGER.info("RBVDR406Impl - executeListQuotationByClient() - START");
 
-		List<Map<String, Object>> lisQuotationsMap = getListQuotationsFromDB(customerId);
+		List<Map<String, Object>> lisQuotationsMap = getListQuotationsFromDB(customerId,channelCode);
 
 		if(!CollectionUtils.isEmpty(lisQuotationsMap)){
 			List<ListQuotationDTO> quotations;
@@ -53,41 +57,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 				map.forEach((key,value) -> LOGGER.info("RBVDR406Impl - executeListQuotationByClient() - " +
 						"lisQuotationsMap - key {} -> value {}",key,value));
 
-				QuotationsDAO quotationsDAO = new QuotationsDAO();
-				quotationsDAO.setPolicyQuotaInternalId((String) map.get(
-						ConstantsUtil.InsuranceQuotation.FIELD_POLICY_QUOTA_INTERNAL_ID));
-				quotationsDAO.setQuoteDate((String) map.get(
-						ConstantsUtil.InsuranceQuotation.FIELD_QUOTE_DATE));
-				quotationsDAO.setQuoteStatus((String) map.get(
-						ConstantsUtil.InsuranceQuotation.FIELD_POLICY_QUOTA_STATUS_TYPE));
-				quotationsDAO.setFinancingStartDate((String) map.get(
-						ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_START_DATE));
-				quotationsDAO.setFinancingEndDate((String) map.get(
-						ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_END_DATE));
-				quotationsDAO.setTotalAmount(getBigDecimalValue(map.get(
-						ConstantsUtil.InsuranceContract.FIELD_SETTLEMENT_FIX_PREMIUM_AMOUNT)));
-				quotationsDAO.setCurrencyId((String) map.get(ConstantsUtil.InsuranceContract.FIELD_CURRENCY_ID));
-				quotationsDAO.setNumberPayments(getBigDecimalValue(map.get(
-						ConstantsUtil.InsuranceContract.FIELD_ISSUED_RECEIPT_NUMBER)));
-				quotationsDAO.setPremiumAmount(getBigDecimalValue(map.get(
-						ConstantsUtil.InsuranceContract.FIELD_PREMIUM_AMOUNT)));
-				quotationsDAO.setCoStatus((String) map.get(
-						ConstantsUtil.InsuranceContract.FIELD_INSRNC_CO_CONTRACT_STATUS_TYPE));
-				quotationsDAO.setProductType((String) map.get(
-						ConstantsUtil.InsuranceProduct.FIELD_INSURANCE_PRODUCT_TYPE));
-				quotationsDAO.setProductDesc((String) map.get(
-						ConstantsUtil.InsuranceProduct.FIELD_INSURANCE_PRODUCT_DESC));
-				quotationsDAO.setModalityType((String) map.get(
-						ConstantsUtil.InsurancePrdModality.FIELD_INSURANCE_MODALITY_TYPE));
-				quotationsDAO.setModalityName((String) map.get(
-						ConstantsUtil.InsurancePrdModality.FIELD_INSURANCE_MODALITY_NAME));
-				quotationsDAO.setPaymentFrequencyName((String) map.get(
-						ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_NAME));
-				quotationsDAO.setPaymentFrequencyId(getBigDecimalValue(map.get(
-						ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_ID)));
-				quotationsDAO.setRfqInternalId((String) map.get(ConstantsUtil.InsuranceQuotation.FIELD_RFQ_INTERNAL_ID));
-
-				return quotationsDAO;
+				return InsuranceQuotationBean.convertMapToBeanQuotation(map);
 			}).collect(Collectors.toList());
 
 			//Construcción de trx
@@ -111,19 +81,21 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			return quotations;
 
 		}else{
-			this.addAdvice("RBVD01020091","No se encontró ninguna cotización del cliente para el producto Vida Ley");
+			this.addAdvice(ErrorsUtil.QUOTATIONS_EMPTY_BY_CUSTOMER.getErrorCode(),
+					ErrorsUtil.QUOTATIONS_EMPTY_BY_CUSTOMER.getErrorMessage());
 			return Collections.emptyList();
 		}
 
 	}
 
-	private List<Map<String, Object>> getListQuotationsFromDB(String customerId) {
+	private List<Map<String, Object>> getListQuotationsFromDB(String customerId,String channelCode) {
 		Map<String,Object> arguments = new HashMap<>();
 		arguments.put(ConstantsUtil.InsuranceQuotation.FIELD_CUSTOMER_ID, customerId);
 		arguments.put(ConstantsUtil.InsuranceProduct.FIELD_PRODUCT_SHORT_DESC,PRODUCT_NAME);
+		arguments.put(ConstantsUtil.InsuranceQuotationMod.FIELD_SALE_CHANNEL_ID,channelCode);
 
 		return this.pisdR402.executeGetListASingleRow(
-				"PISD.GET_LIST_QUOTATIONS_BY_CUSTOMERID",arguments);
+				ConstantsUtil.QueriesName.QUERY_LIST_QUOTATIONS_BY_CUSTOMER,arguments);
 	}
 
 	private ProductDTO createProduct(QuotationsDAO quotationsDAO){
@@ -147,18 +119,31 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 			if(!stringIsNullOrEmpty(coStatus) &&
 					ConstantsUtil.InsuranceContract.INSRNC_CO_CONTRACT_STATUS_PEN.equalsIgnoreCase(coStatus)){
-				statusDTO.setId(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusId());
-				statusDTO.setName(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusName());
+				String contracted = ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusId();
+				String status = getStatusFromConsole(contracted);
+				String substatus = getSubStatusFromConsole(contracted);
+				statusDTO.setId(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
+				statusDTO.setName(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
 			}else if(ConstantsUtil.InsuranceQuotation.QUOTE_STATUS_COT.equalsIgnoreCase(quoteStatus)){
-				statusDTO.setId(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusId());
-				statusDTO.setName(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusName());
+				String quoted = ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusId();
+				String status = getStatusFromConsole(quoted);
+				String substatus = getSubStatusFromConsole(quoted);
+				statusDTO.setId(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
+				statusDTO.setName(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
 			}
 
 			return statusDTO;
 		}else{
 			return null;
 		}
+	}
 
+	private String getStatusFromConsole(String status){
+		return this.applicationConfigurationService.getProperty(PRE_STATUS + status + POST_ID);
+	}
+
+	private String getSubStatusFromConsole(String subStatus){
+		return this.applicationConfigurationService.getProperty(PRE_SUBSTATUS + subStatus + POST_ID);
 	}
 
 	private ValidityPeriodDTO createValidityPeriod(String startDate,String endDate){
@@ -185,13 +170,23 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			planDTO.setId(quotationsDAO.getModalityType());
 			planDTO.setName(quotationsDAO.getModalityName());
 			planDTO.setIsSelected(Boolean.TRUE);
-			planDTO.setTotalInstallment(createAmountDTO(quotationsDAO.getTotalAmount(), quotationsDAO.getCurrencyId()));
+			planDTO.setTotalInstallment(createAmountDTO(
+					calculateTotalAmountFromDB(quotationsDAO.getPremiumAmount(),quotationsDAO.getNumberPayments()),
+					quotationsDAO.getCurrencyId()));
 			planDTO.setInstallmentPlans(createInstallmentPlans(quotationsDAO));
 
 			plans.add(planDTO);
 
 			return plans;
 		}
+	}
+
+	private static BigDecimal calculateTotalAmountFromDB(BigDecimal paymentAmount,BigDecimal numberOfPayments){
+		if(numberOfPayments == null){
+			numberOfPayments = new BigDecimal("1");
+		}
+
+		return paymentAmount.multiply(numberOfPayments);
 	}
 
 	private List<InstallmentPlansDTO> createInstallmentPlans(QuotationsDAO quotationsDAO){

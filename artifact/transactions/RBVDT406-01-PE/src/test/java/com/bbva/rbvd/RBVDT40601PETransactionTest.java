@@ -77,7 +77,7 @@ public class RBVDT40601PETransactionTest {
 		product.setPlans(Collections.singletonList(plan));
 		quotationDTO.setProduct(product);
 		listQuotation.add(quotationDTO);
-	    when(this.rbvdr406.executeListQuotationByClient("98094321")).thenReturn(listQuotation);
+	    when(this.rbvdr406.executeListQuotationByClient("98094321","PC")).thenReturn(listQuotation);
 		Assert.assertNotNull(this.transaction);
 		this.transaction.execute();
 	}

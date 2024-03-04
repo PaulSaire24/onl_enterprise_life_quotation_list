@@ -52,6 +52,10 @@ public class RBVDR406Test {
 
 		Mockito.when(pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(Collections.emptyList());
 		Mockito.when(applicationConfigurationService.getProperty("Mensual")).thenReturn("MONTHLY");
+		Mockito.when(applicationConfigurationService.getProperty("STATUS_QUOTED_ID")).thenReturn("En Gestion");
+		Mockito.when(applicationConfigurationService.getProperty("STATUS_CONTRACTED_ID")).thenReturn("En Formalizacion");
+		Mockito.when(applicationConfigurationService.getProperty("SUBSTATUS_QUOTED_ID")).thenReturn("Cotizada");
+		Mockito.when(applicationConfigurationService.getProperty("SUBSTATUS_CONTRACTED_ID")).thenReturn("Pendiente de carga");
 	}
 
 	private Object getObjectIntrospection() throws Exception{
@@ -72,10 +76,9 @@ public class RBVDR406Test {
 		map1.put("QUOTE_STATUS","COT");
 		map1.put("FINANCING_START_DATE","2024-01-26");
 		map1.put("FINANCING_END_DATE","2025-01-26");
-		map1.put("TOTAL_AMOUNT",null);
-		map1.put("CURRENCY_ID",null);
+		map1.put("PREMIUM_AMOUNT",874.29);
+		map1.put("PREMIUM_CURRENCY_ID","PEN");
 		map1.put("NUMBER_PAYMENTS",null);
-		map1.put("PREMIUM_AMOUNT",null);
 		map1.put("CO_STATUS",null);
 		map1.put("INSURANCE_PRODUCT_TYPE","842");
 		map1.put("INSURANCE_PRODUCT_DESC","SEGURO VIDA LEY");
@@ -93,10 +96,9 @@ public class RBVDR406Test {
 		map2.put("QUOTE_STATUS","COT");
 		map2.put("FINANCING_START_DATE","2024-01-26");
 		map2.put("FINANCING_END_DATE","2025-01-26");
-		map2.put("TOTAL_AMOUNT",570.31);
-		map2.put("CURRENCY_ID","PEN");
+		map2.put("PREMIUM_AMOUNT",874.29);
+		map2.put("PREMIUM_CURRENCY_ID","PEN");
 		map2.put("NUMBER_PAYMENTS",12);
-		map2.put("PREMIUM_AMOUNT",51.85);
 		map2.put("CO_STATUS","PEN");
 		map2.put("INSURANCE_PRODUCT_TYPE","842");
 		map2.put("INSURANCE_PRODUCT_DESC","SEGURO VIDA LEY");
@@ -117,16 +119,16 @@ public class RBVDR406Test {
 
 		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());
 		Assert.assertEquals(listQuotationsMap.get(0).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(0).getId());
 		Assert.assertEquals(listQuotationsMap.get(1).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(1).getId());
-		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusId(),listQuotation.get(0).getStatus().getId());
-		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusId(),listQuotation.get(1).getStatus().getId());
-		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusName(),listQuotation.get(0).getStatus().getName());
-		Assert.assertEquals(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusName(),listQuotation.get(1).getStatus().getName());
+		Assert.assertEquals("En Gestion||Cotizada",listQuotation.get(0).getStatus().getId());
+		Assert.assertEquals("En Formalizacion||Pendiente de carga",listQuotation.get(1).getStatus().getId());
+		Assert.assertEquals("En Gestion||Cotizada",listQuotation.get(0).getStatus().getName());
+		Assert.assertEquals("En Formalizacion||Pendiente de carga",listQuotation.get(1).getStatus().getName());
 		Assert.assertEquals(1,listQuotation.get(0).getProduct().getPlans().size());
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
 		Assert.assertNotNull(listQuotation.get(0).getQuotationDate());
@@ -145,7 +147,7 @@ public class RBVDR406Test {
 
 	@Test
 	public void executeTestWithListQuotationEmpty(){
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
 
 		Assert.assertEquals(1, context.getAdviceList().size());
 		Assert.assertEquals(Collections.emptyList(),listQuotation);
@@ -160,7 +162,7 @@ public class RBVDR406Test {
 
 		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());
@@ -177,7 +179,7 @@ public class RBVDR406Test {
 
 		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","");
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());
@@ -193,7 +195,7 @@ public class RBVDR406Test {
 
 		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(listQuotationsMap);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());
@@ -211,7 +213,7 @@ public class RBVDR406Test {
 
 		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(), Mockito.anyMap())).thenReturn(listQuotationsMap);
 
-		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084");
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());

@@ -22,15 +22,16 @@ public class ConstantsUtil {
 
         public static final String FIELD_FINANCING_START_DATE = "FINANCING_START_DATE";
         public static final String FIELD_FINANCING_END_DATE = "FINANCING_END_DATE";
+        public static final String FIELD_PREMIUN_AMOUNT = "PREMIUM_AMOUNT";
+        public static final String FIELD_PREMIUM_CURRENCY_ID = "PREMIUM_CURRENCY_ID";
+        public static final String FIELD_PAYMENT_TERM_NUMBER = "NUMBER_PAYMENTS";
+        public static final String FIELD_SALE_CHANNEL_ID = "CHANNEL_ID";
     }
 
     public static final class InsuranceContract{
         private InsuranceContract(){}
 
-        public static final String FIELD_SETTLEMENT_FIX_PREMIUM_AMOUNT = "TOTAL_AMOUNT";
         public static final String FIELD_CURRENCY_ID = "CURRENCY_ID";
-        public static final String FIELD_ISSUED_RECEIPT_NUMBER = "NUMBER_PAYMENTS";
-        public static final String FIELD_PREMIUM_AMOUNT = "PREMIUM_AMOUNT";
         public static final String FIELD_INSRNC_CO_CONTRACT_STATUS_TYPE = "CO_STATUS";
 
         public static final String INSRNC_CO_CONTRACT_STATUS_PEN = "PEN";
@@ -59,26 +60,32 @@ public class ConstantsUtil {
         public static final String FIELD_PAYMENT_FREQUENCY_ID = "PAYMENT_FREQUENCY_ID";
     }
 
+    public static final class QueriesName{
+        private QueriesName(){}
+
+
+        public static final String QUERY_LIST_QUOTATIONS_BY_CUSTOMER = "PISD.GET_LIST_QUOTATIONS_BY_CUSTOMERID";
+    }
+
+    public static final String DOUBLE_VERTICAL_LINE = "||";
+
+
     public enum StatusEnum{
 
-        STATUS_CONTRACTED("En Formalizacion||Pendiente de carga","En Formalizacion||Pendiente de carga"),
-        STATUS_QUOTED("En Gestion||Cotizada","En Gestion||Cotizada");
+        STATUS_CONTRACTED("CONTRACTED"),
+        STATUS_QUOTED("QUOTED");
 
 
         private final String statusId;
-        private final String statusName;
+
 
         public String getStatusId() {
             return statusId;
         }
 
-        public String getStatusName() {
-            return statusName;
-        }
 
-        StatusEnum(String statusId, String statusName) {
+        StatusEnum(String statusId) {
             this.statusId = statusId;
-            this.statusName = statusName;
         }
     }
 
