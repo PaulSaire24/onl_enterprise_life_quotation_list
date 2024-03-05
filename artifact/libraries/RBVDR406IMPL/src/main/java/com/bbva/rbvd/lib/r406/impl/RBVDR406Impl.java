@@ -186,6 +186,10 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			numberOfPayments = new BigDecimal("1");
 		}
 
+		if(paymentAmount == null){
+			return null;
+		}
+
 		return paymentAmount.multiply(numberOfPayments);
 	}
 
