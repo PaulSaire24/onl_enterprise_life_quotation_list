@@ -52,10 +52,10 @@ public class RBVDR406Test {
 
 		Mockito.when(pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(Collections.emptyList());
 		Mockito.when(applicationConfigurationService.getProperty("Mensual")).thenReturn("MONTHLY");
-		Mockito.when(applicationConfigurationService.getProperty("STATUS_QUOTED_ID")).thenReturn("En Gestion");
-		Mockito.when(applicationConfigurationService.getProperty("STATUS_CONTRACTED_ID")).thenReturn("En Formalizacion");
-		Mockito.when(applicationConfigurationService.getProperty("SUBSTATUS_QUOTED_ID")).thenReturn("Cotizada");
-		Mockito.when(applicationConfigurationService.getProperty("SUBSTATUS_CONTRACTED_ID")).thenReturn("Pendiente de carga");
+		Mockito.when(applicationConfigurationService.getProperty("ENTERPRISE_LIFE_STATUS_QUOTED_ID")).thenReturn("QUOTED");
+		Mockito.when(applicationConfigurationService.getProperty("ENTERPRISE_LIFE_STATUS_QUOTED_NAME")).thenReturn("COTIZADA");
+		Mockito.when(applicationConfigurationService.getProperty("ENTERPRISE_LIFE_STATUS_CONTRACTED_ID")).thenReturn("CONTRACTED");
+		Mockito.when(applicationConfigurationService.getProperty("ENTERPRISE_LIFE_STATUS_CONTRACTED_NAME")).thenReturn("CONTRATADA");
 	}
 
 	private Object getObjectIntrospection() throws Exception{
@@ -125,10 +125,10 @@ public class RBVDR406Test {
 		Assert.assertEquals(2,listQuotation.size());
 		Assert.assertEquals(listQuotationsMap.get(0).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(0).getId());
 		Assert.assertEquals(listQuotationsMap.get(1).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(1).getId());
-		Assert.assertEquals("En Gestion||Cotizada",listQuotation.get(0).getStatus().getId());
-		Assert.assertEquals("En Formalizacion||Pendiente de carga",listQuotation.get(1).getStatus().getId());
-		Assert.assertEquals("En Gestion||Cotizada",listQuotation.get(0).getStatus().getName());
-		Assert.assertEquals("En Formalizacion||Pendiente de carga",listQuotation.get(1).getStatus().getName());
+		Assert.assertEquals("QUOTED",listQuotation.get(0).getStatus().getId());
+		Assert.assertEquals("CONTRACTED",listQuotation.get(1).getStatus().getId());
+		Assert.assertEquals("COTIZADA",listQuotation.get(0).getStatus().getName());
+		Assert.assertEquals("CONTRATADA",listQuotation.get(1).getStatus().getName());
 		Assert.assertEquals(1,listQuotation.get(0).getProduct().getPlans().size());
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
 		Assert.assertNotNull(listQuotation.get(0).getQuotationDate());

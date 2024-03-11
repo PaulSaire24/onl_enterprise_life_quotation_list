@@ -37,9 +37,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RBVDR406Impl.class);
 
 	private static final String PRODUCT_NAME = "VIDALEY";
-	private static final String PRE_STATUS = "STATUS_";
-	private static final String PRE_SUBSTATUS = "SUBSTATUS_";
-	private static final String POST_ID = "_ID";
+	private static final String ENTERPRISE_LIFE_STATUS = "ENTERPRISE_LIFE_STATUS_";
+
 
 
 	@Override
@@ -119,17 +118,11 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 			if(!stringIsNullOrEmpty(coStatus) &&
 					ConstantsUtil.InsuranceContract.INSRNC_CO_CONTRACT_STATUS_PEN.equalsIgnoreCase(coStatus)){
-				String contracted = ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getStatusId();
-				String status = getStatusFromConsole(contracted);
-				String substatus = getSubStatusFromConsole(contracted);
-				statusDTO.setId(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
-				statusDTO.setName(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
+				statusDTO.setId(getStatusFromConsole(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getKeyId()));
+				statusDTO.setName(getStatusFromConsole(ConstantsUtil.StatusEnum.STATUS_CONTRACTED.getKeyName()));
 			}else if(ConstantsUtil.InsuranceQuotation.QUOTE_STATUS_COT.equalsIgnoreCase(quoteStatus)){
-				String quoted = ConstantsUtil.StatusEnum.STATUS_QUOTED.getStatusId();
-				String status = getStatusFromConsole(quoted);
-				String substatus = getSubStatusFromConsole(quoted);
-				statusDTO.setId(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
-				statusDTO.setName(status + ConstantsUtil.DOUBLE_VERTICAL_LINE + substatus);
+				statusDTO.setId(getStatusFromConsole(ConstantsUtil.StatusEnum.STATUS_QUOTED.getKeyId()));
+				statusDTO.setName(getStatusFromConsole(ConstantsUtil.StatusEnum.STATUS_QUOTED.getKeyName()));
 			}
 
 			return statusDTO;
@@ -138,12 +131,8 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 		}
 	}
 
-	private String getStatusFromConsole(String status){
-		return this.applicationConfigurationService.getProperty(PRE_STATUS + status + POST_ID);
-	}
-
-	private String getSubStatusFromConsole(String subStatus){
-		return this.applicationConfigurationService.getProperty(PRE_SUBSTATUS + subStatus + POST_ID);
+	private String getStatusFromConsole(String key){
+		return this.applicationConfigurationService.getProperty(ENTERPRISE_LIFE_STATUS + key);
 	}
 
 	private ValidityPeriodDTO createValidityPeriod(String startDate,String endDate){

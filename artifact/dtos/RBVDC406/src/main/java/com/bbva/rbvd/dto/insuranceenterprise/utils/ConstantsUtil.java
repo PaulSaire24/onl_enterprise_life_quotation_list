@@ -67,25 +67,30 @@ public class ConstantsUtil {
         public static final String QUERY_LIST_QUOTATIONS_BY_CUSTOMER = "PISD.GET_LIST_QUOTATIONS_BY_CUSTOMERID";
     }
 
-    public static final String DOUBLE_VERTICAL_LINE = "||";
+
 
 
     public enum StatusEnum{
 
-        STATUS_CONTRACTED("CONTRACTED"),
-        STATUS_QUOTED("QUOTED");
+        STATUS_QUOTED("QUOTED_ID","QUOTED_NAME"),
+        STATUS_CONTRACTED("CONTRACTED_ID","CONTRACTED_NAME");
 
 
-        private final String statusId;
+        private final String keyId;
+        private final String keyName;
 
 
-        public String getStatusId() {
-            return statusId;
+        public String getKeyId() {
+            return keyId;
         }
 
+        public String getKeyName() {
+            return keyName;
+        }
 
-        StatusEnum(String statusId) {
-            this.statusId = statusId;
+        StatusEnum(String keyId, String keyName) {
+            this.keyId = keyId;
+            this.keyName = keyName;
         }
     }
 
