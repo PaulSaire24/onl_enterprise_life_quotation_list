@@ -12,5 +12,8 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>LIBRARIES-onl_enterprise_life_quotation_list</name>
-	<modules/>
+	<modules>
+		<module>RBVDR406</module>
+		<module>RBVDR406IMPL</module>
+	</modules>
 </project>
