@@ -1,6 +1,5 @@
 package com.bbva.rbvd.lib.r406.impl.utils;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 public class ValidateUtils {
