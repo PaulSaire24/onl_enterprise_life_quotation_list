@@ -11,7 +11,7 @@ public class QuotationsDAO {
     private String financingStartDate;
     private String financingEndDate;
     private BigDecimal totalAmount;
-    private String currencyId;
+    private String premiumCurrencyId;
     private BigDecimal numberPayments;
     private BigDecimal premiumAmount;
     private String coStatus;
@@ -22,6 +22,10 @@ public class QuotationsDAO {
     private String paymentFrequencyName;
     private BigDecimal paymentFrequencyId;
     private String rfqInternalId;
+    private String employeesIndType;
+    private BigDecimal employeeNumber;
+    private BigDecimal payrollAmount;
+    private String payrollCurrencyId;
 
 
     public String getPolicyQuotaInternalId() {
@@ -65,15 +69,45 @@ public class QuotationsDAO {
         this.premiumAmount = premiumAmount;
     }
 
-    public String getCurrencyId() {
-        return currencyId;
+    public String getPremiumCurrencyId() {
+        return premiumCurrencyId;
     }
 
-    public void setCurrencyId(String currencyId) {
-        this.currencyId = currencyId;
+    public void setPremiumCurrencyId(String premiumCurrencyId) {
+        this.premiumCurrencyId = premiumCurrencyId;
     }
 
+    public String getEmployeesIndType() {
+        return employeesIndType;
+    }
 
+    public void setEmployeesIndType(String employeesIndType) {
+        this.employeesIndType = employeesIndType;
+    }
+
+    public BigDecimal getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(BigDecimal employeeNumber) {
+        this.employeeNumber = employeeNumber;
+    }
+
+    public BigDecimal getPayrollAmount() {
+        return payrollAmount;
+    }
+
+    public void setPayrollAmount(BigDecimal payrollAmount) {
+        this.payrollAmount = payrollAmount;
+    }
+
+    public String getPayrollCurrencyId() {
+        return payrollCurrencyId;
+    }
+
+    public void setPayrollCurrencyId(String payrollCurrencyId) {
+        this.payrollCurrencyId = payrollCurrencyId;
+    }
 
     public String getCoStatus() {
         return coStatus;
@@ -163,6 +197,7 @@ public class QuotationsDAO {
         this.rfqInternalId = rfqInternalId;
     }
 
+
     @Override
     public String toString() {
         return "QuotationsDAO{" +
@@ -172,7 +207,7 @@ public class QuotationsDAO {
                 ", financingStartDate='" + financingStartDate + '\'' +
                 ", financingEndDate='" + financingEndDate + '\'' +
                 ", totalAmount=" + totalAmount +
-                ", currencyId='" + currencyId + '\'' +
+                ", premiumCurrencyId='" + premiumCurrencyId + '\'' +
                 ", numberPayments=" + numberPayments +
                 ", premiumAmount=" + premiumAmount +
                 ", coStatus='" + coStatus + '\'' +
@@ -183,6 +218,11 @@ public class QuotationsDAO {
                 ", paymentFrequencyName='" + paymentFrequencyName + '\'' +
                 ", paymentFrequencyId=" + paymentFrequencyId +
                 ", rfqInternalId='" + rfqInternalId + '\'' +
+                ", employeesIndType='" + employeesIndType + '\'' +
+                ", employeeNumber=" + employeeNumber +
+                ", payrollAmount=" + payrollAmount +
+                ", payrollCurrencyId='" + payrollCurrencyId + '\'' +
                 '}';
     }
+
 }

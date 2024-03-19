@@ -1,16 +1,12 @@
 package com.bbva.rbvd.lib.r406.impl;
 
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.ProductDTO;
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.DescriptionDTO;
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.ValidityPeriodDTO;
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.PlanDTO;
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.AmountDTO;
-import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.InstallmentPlansDTO;
+import com.bbva.rbvd.dto.insuranceenterprise.commons.dto.*;
 import com.bbva.rbvd.dto.insuranceenterprise.dao.QuotationsDAO;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ErrorsUtil;
 import com.bbva.rbvd.lib.r406.impl.transform.bean.InsuranceQuotationBean;
+import com.bbva.rbvd.lib.r406.impl.utils.ValidateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -26,10 +22,10 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringDateToLocalDate;
-import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.stringIsNullOrEmpty;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertStringToUpperAndLowerCase;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertLocalDateToDate;
 import static com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils.convertObjectToString;
+import static com.bbva.rbvd.lib.r406.impl.utils.ValidateUtils.stringIsNullOrEmpty;
 
 
 public class RBVDR406Impl extends RBVDR406Abstract {
@@ -68,6 +64,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 				quotationDTO.setId(quotationsDAO.getPolicyQuotaInternalId());
 				quotationDTO.setQuotationDate(convertLocalDateToDate(
 						convertStringDateToLocalDate(quotationsDAO.getQuoteDate())));
+				quotationDTO.setEmployees(createEmployees(quotationsDAO));
 				quotationDTO.setProduct(createProduct(quotationsDAO));
 				quotationDTO.setValidityPeriod(createValidityPeriod(
 						quotationsDAO.getFinancingStartDate(),quotationsDAO.getFinancingEndDate()));
@@ -84,7 +81,25 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 					ErrorsUtil.QUOTATIONS_EMPTY_BY_CUSTOMER.getErrorMessage());
 			return Collections.emptyList();
 		}
+	}
 
+	private EmployeesDTO createEmployees(QuotationsDAO quotationsDAO){
+		if(ValidateUtils.allValuesStringNotNullOrEmpty(quotationsDAO.getEmployeesIndType(),
+				quotationsDAO.getPayrollCurrencyId()) && quotationsDAO.getEmployeeNumber() != null &&
+				quotationsDAO.getPayrollAmount() != null){
+			EmployeesDTO employeesDTO = new EmployeesDTO();
+
+			employeesDTO.setAreMajorityAge(quotationsDAO.getEmployeesIndType().equals("1"));
+			employeesDTO.setEmployeesNumber(quotationsDAO.getEmployeeNumber().longValue());
+
+			AmountDTO payrollAmount = new AmountDTO();
+			payrollAmount.setAmount(quotationsDAO.getPayrollAmount().doubleValue());
+			payrollAmount.setCurrency(quotationsDAO.getPayrollCurrencyId());
+			employeesDTO.setMonthlyPayrollAmount(payrollAmount);
+
+			return employeesDTO;
+		}
+		return null;
 	}
 
 	private List<Map<String, Object>> getListQuotationsFromDB(String customerId,String channelCode) {
@@ -161,7 +176,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 			planDTO.setIsSelected(Boolean.TRUE);
 			planDTO.setTotalInstallment(createAmountDTO(
 					calculateTotalAmountFromDB(quotationsDAO.getPremiumAmount(),quotationsDAO.getNumberPayments()),
-					quotationsDAO.getCurrencyId()));
+					quotationsDAO.getPremiumCurrencyId()));
 			planDTO.setInstallmentPlans(createInstallmentPlans(quotationsDAO));
 
 			plans.add(planDTO);
@@ -191,7 +206,7 @@ public class RBVDR406Impl extends RBVDR406Abstract {
 
 			installmentPlansDTO.setPaymentsTotalNumber(quotationsDAO.getNumberPayments().longValue());
 			installmentPlansDTO.setPaymentAmount(createAmountDTO(quotationsDAO.getPremiumAmount(),
-					quotationsDAO.getCurrencyId()));
+					quotationsDAO.getPremiumCurrencyId()));
 			installmentPlansDTO.setPeriod(createPeriod(quotationsDAO.getPaymentFrequencyName()));
 
 			installmentPlans.add(installmentPlansDTO);

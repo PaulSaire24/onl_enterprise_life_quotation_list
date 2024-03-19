@@ -8,6 +8,8 @@ import com.bbva.pisd.lib.r402.PISDR402;
 import com.bbva.rbvd.dto.insuranceenterprise.listquotation.ListQuotationDTO;
 import com.bbva.rbvd.dto.insuranceenterprise.utils.ConstantsUtil;
 import com.bbva.rbvd.lib.r406.impl.RBVDR406Impl;
+import com.bbva.rbvd.lib.r406.impl.utils.ConvertUtils;
+import com.bbva.rbvd.lib.r406.impl.utils.ValidateUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.springframework.aop.framework.Advised;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -87,6 +90,10 @@ public class RBVDR406Test {
 		map1.put("PAYMENT_FREQUENCY_NAME",null);
 		map1.put("PAYMENT_FREQUENCY_ID",null);
 		map1.put("RFQ_INTERNAL_ID","0814000038434");
+		map1.put("YEARS_OLD_18_65_EMPLOYEES_IND_TYPE","1");
+		map1.put("PAYROLL_EMPLOYEE_NUMBER",3);
+		map1.put("INCOMES_PAYROLL_AMOUNT",567.91);
+		map1.put("CURRENCY_ID","PEN");
 
 		mapList.add(map1);
 
@@ -107,6 +114,10 @@ public class RBVDR406Test {
 		map2.put("PAYMENT_FREQUENCY_NAME","MENSUAL");
 		map2.put("PAYMENT_FREQUENCY_ID",1);
 		map2.put("RFQ_INTERNAL_ID",null);
+		map2.put("YEARS_OLD_18_65_EMPLOYEES_IND_TYPE","1");
+		map2.put("PAYROLL_EMPLOYEE_NUMBER",2);
+		map2.put("INCOMES_PAYROLL_AMOUNT",8322.74);
+		map2.put("CURRENCY_ID","PEN");
 
 		mapList.add(map2);
 
@@ -123,6 +134,7 @@ public class RBVDR406Test {
 
 		Assert.assertNotNull(listQuotation);
 		Assert.assertEquals(2,listQuotation.size());
+
 		Assert.assertEquals(listQuotationsMap.get(0).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(0).getId());
 		Assert.assertEquals(listQuotationsMap.get(1).get("POLICY_QUOTA_INTERNAL_ID"),listQuotation.get(1).getId());
 		Assert.assertEquals("QUOTED",listQuotation.get(0).getStatus().getId());
@@ -142,6 +154,13 @@ public class RBVDR406Test {
 		Assert.assertNotNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod().getName());
 		Assert.assertNotNull(listQuotation.get(0).getQuotationReference());
 		Assert.assertNull(listQuotation.get(1).getQuotationReference());
+
+		Assert.assertNotNull(listQuotation.get(0).getEmployees());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees());
+		Assert.assertTrue(listQuotation.get(0).getEmployees().getAreMajorityAge());
+		Assert.assertTrue(listQuotation.get(1).getEmployees().getAreMajorityAge());
+		Assert.assertEquals(new Long(3),listQuotation.get(0).getEmployees().getEmployeesNumber());
+		Assert.assertEquals(new Long(2),listQuotation.get(1).getEmployees().getEmployeesNumber());
 
 	}
 
@@ -223,6 +242,31 @@ public class RBVDR406Test {
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().size());
 		Assert.assertEquals(1,listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().size());
 		Assert.assertNull(listQuotation.get(1).getProduct().getPlans().get(0).getInstallmentPlans().get(0).getPeriod());
+	}
+
+	@Test
+	public void executeListQuotationWithEmployeesDataContainsNull(){
+		List<Map<String,Object>> listQuotationsMap = getListQuotationsMap();
+		listQuotationsMap.get(0).put("YEARS_OLD_18_65_EMPLOYEES_IND_TYPE",null);
+		listQuotationsMap.get(0).put("PAYROLL_EMPLOYEE_NUMBER",null);
+		listQuotationsMap.get(0).put("INCOMES_PAYROLL_AMOUNT",null);
+		listQuotationsMap.get(0).put("CURRENCY_ID",null);
+
+		Mockito.when(this.pisdr402.executeGetListASingleRow(Mockito.anyString(),Mockito.anyMap())).thenReturn(listQuotationsMap);
+
+		List<ListQuotationDTO> listQuotation = rbvdR406.executeListQuotationByClient("97790084","PC");
+
+		Assert.assertNotNull(listQuotation);
+		Assert.assertEquals(2,listQuotation.size());
+
+		Assert.assertNull(listQuotation.get(0).getEmployees());
+
+		Assert.assertNotNull(listQuotation.get(1).getEmployees());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees().getAreMajorityAge());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees().getEmployeesNumber());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees().getMonthlyPayrollAmount());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees().getMonthlyPayrollAmount().getAmount());
+		Assert.assertNotNull(listQuotation.get(1).getEmployees().getMonthlyPayrollAmount().getCurrency());
 	}
 
 }

@@ -60,6 +60,16 @@ public class ConstantsUtil {
         public static final String FIELD_PAYMENT_FREQUENCY_ID = "PAYMENT_FREQUENCY_ID";
     }
 
+    public static final class InsuranceQuoteCompanyLife{
+        private InsuranceQuoteCompanyLife(){}
+
+        public static final String FIELD_YEARS_OLD_18_65_EMPLOYEES_IND_TYPE = "YEARS_OLD_18_65_EMPLOYEES_IND_TYPE";
+        public static final String FIELD_PAYROLL_EMPLOYEE_NUMBER = "PAYROLL_EMPLOYEE_NUMBER";
+        public static final String FIELD_INCOMES_PAYROLL_AMOUNT = "INCOMES_PAYROLL_AMOUNT";
+        public static final String FIELD_CURRENCY_ID = "CURRENCY_ID";
+
+    }
+
     public static final class QueriesName{
         private QueriesName(){}
 
