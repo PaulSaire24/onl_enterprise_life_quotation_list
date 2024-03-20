@@ -26,7 +26,7 @@ public class InsuranceQuotationBean {
                 ConstantsUtil.InsuranceQuotationMod.FIELD_FINANCING_END_DATE));
         quotationsDAO.setPremiumAmount(getBigDecimalValue(map.get(
                 ConstantsUtil.InsuranceQuotationMod.FIELD_PREMIUN_AMOUNT)));
-        quotationsDAO.setCurrencyId((String) map.get(ConstantsUtil.InsuranceQuotationMod.FIELD_PREMIUM_CURRENCY_ID));
+        quotationsDAO.setPremiumCurrencyId((String) map.get(ConstantsUtil.InsuranceQuotationMod.FIELD_PREMIUM_CURRENCY_ID));
         quotationsDAO.setNumberPayments(getBigDecimalValue(map.get(
                 ConstantsUtil.InsuranceQuotationMod.FIELD_PAYMENT_TERM_NUMBER)));
         quotationsDAO.setCoStatus((String) map.get(
@@ -44,6 +44,14 @@ public class InsuranceQuotationBean {
         quotationsDAO.setPaymentFrequencyId(getBigDecimalValue(map.get(
                 ConstantsUtil.InsrncPaymentPeriod.FIELD_PAYMENT_FREQUENCY_ID)));
         quotationsDAO.setRfqInternalId((String) map.get(ConstantsUtil.InsuranceQuotation.FIELD_RFQ_INTERNAL_ID));
+        quotationsDAO.setEmployeesIndType((String) map.get(
+                ConstantsUtil.InsuranceQuoteCompanyLife.FIELD_YEARS_OLD_18_65_EMPLOYEES_IND_TYPE));
+        quotationsDAO.setEmployeeNumber(getBigDecimalValue(map.get(
+                ConstantsUtil.InsuranceQuoteCompanyLife.FIELD_PAYROLL_EMPLOYEE_NUMBER)));
+        quotationsDAO.setPayrollAmount(getBigDecimalValue(map.get(
+                ConstantsUtil.InsuranceQuoteCompanyLife.FIELD_INCOMES_PAYROLL_AMOUNT)));
+        quotationsDAO.setPayrollCurrencyId((String) map.get(
+                ConstantsUtil.InsuranceQuoteCompanyLife.FIELD_CURRENCY_ID));
 
         return quotationsDAO;
     }

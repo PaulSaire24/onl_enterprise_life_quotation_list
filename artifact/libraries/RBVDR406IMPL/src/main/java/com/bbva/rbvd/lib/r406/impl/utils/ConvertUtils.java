@@ -20,9 +20,6 @@ public class ConvertUtils {
         return str.toString();
     }
 
-    public static boolean stringIsNullOrEmpty(String value){
-        return value == null || value.isEmpty();
-    }
 
     public static LocalDate convertStringDateToLocalDate(String date){
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
